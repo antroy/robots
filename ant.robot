@@ -6,25 +6,24 @@ import logging
 from robot import *
 
 class AntBot(Robot):
-    name = "DoomBot"
+    name = "AntsBot"
     colour = "000000"
     alt_colour = "FFFF00"
 
+    def initialize(self):
+        self.message("New Game Initializing")
+
     def start(self):
-        self.message("Hello??")
-        self.shoot(20)
+        logging.info("Starting Game")
+        self.accelerate(0.5)
 
-    def on_tick(self):
-        self.shoot(10)
+    def on_tick(self, turn):
+        if turn % 3 == 0:
+            self.shoot(10)
 
-    def Radar(self, distance, type, angle):
-        logging.info("Radar received: dist: %s; type: %s; angle: %s" % (distance, type, angle))
-
-    def Energy(self, level):
-        self.energy = float(level)
-        logging.info("Energy: %s" % self.energy)
-
-    def GameStarts(self):
-        self.game_started = True
+    def wall_spotted(self, r):
+        logging.debug("Distance from Wall: %s" % r.distance)
+        if r.distance < 10.0:
+            self.rotate(0.7, 2.0)
 
 start(AntBot)
